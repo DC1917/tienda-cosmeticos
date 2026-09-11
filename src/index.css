@@ -1,1 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
+
+@theme {
+  --font-serif: "Quicksand", ui-rounded, "Nunito", sans-serif;
+}

@@ -154,7 +154,7 @@ function AdminProductos() {
     return (
       <div className="min-h-screen bg-rose-50/50 flex items-center justify-center p-6">
         <div className="bg-white p-8 rounded-3xl border border-pink-100 shadow-lg max-w-md w-full text-center">
-          <span className="text-[11px] uppercase tracking-[0.3em] text-pink-600 font-semibold block mb-2">🌸 Panel de Mamá 🌸</span>
+          <span className="text-[11px] uppercase tracking-[0.3em] text-pink-600 font-semibold block mb-2">🌸 Panel Admin 🌸</span>
           <h1 className="text-2xl font-light font-serif text-slate-800 mb-2">Acceso Admin</h1>
           <p className="text-xs text-slate-500 font-light mb-6">Ingresa tu clave secreta para administrar la tiendita.</p>
           
@@ -185,7 +185,7 @@ function AdminProductos() {
       <div className="flex justify-between items-center bg-white p-6 rounded-3xl border border-pink-100 shadow-sm">
         <div>
           <span className="text-[10px] uppercase tracking-widest text-pink-600 font-semibold">Modo Administrador</span>
-          <h2 className="text-lg font-light font-serif text-slate-800">Tienda de Mamá 💖</h2>
+          <h2 className="text-lg font-light font-serif text-slate-800">Gestión de Catálogo 🌸</h2>
         </div>
         <button 
           onClick={cerrarSesion} 

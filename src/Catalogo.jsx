@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { collection, getDocs } from 'firebase/firestore'
 import { db } from './firebase'
 import { Link } from 'react-router-dom'
+import SakuraIcon from './SakuraIcon'
 
 function Catalogo() {
   const [productos, setProductos] = useState([])
@@ -26,10 +27,13 @@ function Catalogo() {
     <div className="min-h-screen bg-gradient-to-b from-rose-50/50 via-white to-pink-50/30 py-12 px-6">
       <div className="max-w-6xl mx-auto">
         <header className="text-center mb-12">
+          <div className="flex justify-center mb-3">
+            <SakuraIcon className="h-10 w-10 text-pink-400" />
+          </div>
           <span className="text-[11px] uppercase tracking-[0.3em] text-pink-600 font-semibold bg-pink-100/60 px-4 py-1.5 rounded-full inline-block mb-3 shadow-xs">
-            ✨ Cosmética & Perfumería Exclusiva ✨
+            Cosmética & Perfumería Exclusiva
           </span>
-          <h1 className="text-4xl font-light font-serif text-slate-800 tracking-tight">Catálogo de Mamá</h1>
+          <h1 className="text-4xl font-medium font-serif text-slate-800 tracking-tight">Catálogo</h1>
         </header>
 
         {productos.length === 0 ? (

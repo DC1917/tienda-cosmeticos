@@ -9,8 +9,7 @@ function DetalleProducto() {
   const [cargando, setCargando] = useState(true)
   const [fotoActiva, setFotoActiva] = useState(0)
 
-  // CAMBIA ESTE NÚMERO POR EL WHATSAPP DE TU MAMÁ (con código de país, ej: 569...)
-  const TELEFONO_WHATSAPP = "56912345678"
+  const TELEFONO_WHATSAPP = "56931995321"
 
   useEffect(() => {
     async function cargar() {
