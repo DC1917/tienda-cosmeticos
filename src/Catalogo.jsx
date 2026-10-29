@@ -1,139 +1,84 @@
-import { useEffect, useState } from 'react'
-import { collection, getDocs } from 'firebase/firestore'
-import { db } from './firebase'
-import { Link } from 'react-router-dom'
+import { useMemo } from 'react'
+import { useSearchParams } from 'react-router-dom'
+import { useProductos } from './productos'
+import { CATEGORIAS, precioFinal } from './tienda'
+import { Cargando, Icono, TarjetaProducto } from './ui'
 
-function SakuraFlower({ className = '' }) {
-  return (
-    <svg
-      className={`sakura-mark ${className}`}
-      viewBox="0 0 100 100"
-      aria-hidden="true"
-      focusable="false"
-    >
-      {[0, 72, 144, 216, 288].map(angle => (
-        <ellipse
-          key={angle}
-          cx="50"
-          cy="24"
-          rx="16"
-          ry="24"
-          fill="#d88e9a"
-          transform={`rotate(${angle} 50 50)`}
-        />
-      ))}
-      <circle cx="50" cy="50" r="6" fill="#f6d99e" />
-    </svg>
-  )
-}
+export default function Catalogo() {
+  const [params, setParams] = useSearchParams()
+  const categoria = params.get('categoria') || ''
+  const q = params.get('q') || ''
+  const orden = params.get('orden') || ''
+  const { productos, cargando, error } = useProductos()
 
-function Catalogo() {
-  const [productos, setProductos] = useState([])
-  const [cargando, setCargando] = useState(true)
-
-  useEffect(() => {
-    async function obtenerProductos() {
-      const snapshot = await getDocs(collection(db, 'cosmeticos'))
-      setProductos(snapshot.docs.map(d => ({ id: d.id, ...d.data() })))
-      setCargando(false)
+  const lista = useMemo(() => {
+    let r = productos
+    if (categoria) r = r.filter((p) => p.categoria === categoria)
+    if (q.trim()) {
+      const t = q.toLowerCase()
+      r = r.filter((p) => `${p.nombre} ${p.marca} ${p.descripcion}`.toLowerCase().includes(t))
     }
-    obtenerProductos()
-  }, [])
+    if (orden) r = [...r].sort((a, b) => (orden === 'asc' ? 1 : -1) * (precioFinal(a) - precioFinal(b)))
+    return r
+  }, [productos, categoria, q, orden])
 
-  if (cargando) {
-    return (
-      <div className="catalog-loading" role="status">
-        <SakuraFlower />
-        <p>Cargando catálogo...</p>
-      </div>
-    )
-  }
+  const set = (k, v) =>
+    setParams((p) => { v ? p.set(k, v) : p.delete(k); return p }, { replace: true })
 
   return (
-    <div className="catalog-page">
-      <div className="catalog-container">
-        <section className="catalog-hero" aria-labelledby="catalog-title">
-          <div className="catalog-hero__copy">
-            <p className="catalog-eyebrow"><span /> Belleza en cada ritual</p>
-            <h1 id="catalog-title">Un momento<br /><em>para ti.</em></h1>
-            <p className="catalog-hero__description">
-              Encuentra tus favoritos de cosmética y perfumería para sentirte bien todos los días.
-            </p>
-            <a className="catalog-hero__link" href="#coleccion">
-              Descubrir la colección <span aria-hidden="true">↓</span>
-            </a>
-            <p className="catalog-hero__note">DETALLES QUE TE HACEN SENTIR BIEN</p>
-          </div>
+    <div className="mx-auto max-w-6xl px-4 py-12">
+      <p className="eyebrow">Tienda</p>
+      <h1 className="mt-2 text-5xl">Catálogo</h1>
 
-          <div className="catalog-hero__art" aria-hidden="true">
-            <svg className="catalog-hero__branch" viewBox="0 0 360 300" focusable="false">
-              <path d="M20 280C78 234 112 190 157 151S232 102 319 26M91 218C71 191 57 157 55 126M157 151C192 151 221 158 250 179M231 104C230 75 244 51 269 35" />
-            </svg>
-            <SakuraFlower className="catalog-hero__blossom--one" />
-            <SakuraFlower className="catalog-hero__blossom--two" />
-            <SakuraFlower className="catalog-hero__blossom--three" />
-            <SakuraFlower className="catalog-hero__blossom--four" />
-            <span className="catalog-hero__art-label">Un detalle de color para tu día</span>
-          </div>
-        </section>
-
-        <section id="coleccion" className="catalog-collection" aria-labelledby="collection-title">
-          <div className="catalog-section-heading">
-            <div>
-              <p className="catalog-eyebrow"><span /> Productos para ti</p>
-              <h2 id="collection-title">La colección</h2>
-            </div>
-            <span className="catalog-section-heading__count">
-              {productos.length.toString().padStart(2, '0')} ARTÍCULOS
-            </span>
-          </div>
-
-          {productos.length === 0 ? (
-            <div className="catalog-empty">
-              <SakuraFlower className="catalog-empty__mark" />
-              <h3>Un espacio para lo que viene</h3>
-              <p>Pronto encontrarás nuevos productos en nuestra colección.</p>
-            </div>
-          ) : (
-            <div className="catalog-grid">
-              {productos.map((producto, index) => (
-                <Link
-                  to={`/producto/${producto.id}`}
-                  key={producto.id}
-                  className="product-card"
-                  aria-label={`Ver ${producto.nombre}`}
-                >
-                  <div className="product-card__image-wrap">
-                    <img
-                      src={producto.fotoPortada}
-                      alt={producto.nombre}
-                      className="product-card__image"
-                      loading="lazy"
-                    />
-                    <span className="product-card__index">
-                      {String(index + 1).padStart(2, '0')}
-                    </span>
-                    <span className="product-card__arrow" aria-hidden="true">↗</span>
-                  </div>
-                  <div className="product-card__details">
-                    <div>
-                      <h3>{producto.nombre}</h3>
-                      <p>{producto.descripcion || 'Un detalle para tu ritual de cuidado.'}</p>
-                    </div>
-                    <span className="product-card__price">
-                      {producto.precio != null
-                        ? `$${producto.precio.toLocaleString('es-CL')}`
-                        : 'Consultar'}
-                    </span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          )}
-        </section>
+      <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+        <label className="relative flex-1">
+          <span className="sr-only">Buscar</span>
+          <Icono n="buscar" className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-suave" />
+          <input
+            type="search"
+            value={q}
+            onChange={(e) => set('q', e.target.value)}
+            placeholder="Buscar productos o marcas…"
+            className="h-12 w-full rounded-full border border-borde bg-white pl-11 pr-4 text-base outline-none focus:ring-2 focus:ring-rosa/30"
+          />
+        </label>
+        <label>
+          <span className="sr-only">Ordenar</span>
+          <select value={orden} onChange={(e) => set('orden', e.target.value)} className="h-12 w-full rounded-full border border-borde bg-white px-5 text-base outline-none">
+            <option value="">Ordenar: novedades</option>
+            <option value="asc">Precio: menor a mayor</option>
+            <option value="desc">Precio: mayor a menor</option>
+          </select>
+        </label>
       </div>
+
+      <div className="-mx-4 mt-5 flex gap-2 overflow-x-auto px-4 pb-2">
+        {['', ...CATEGORIAS].map((c) => (
+          <button
+            key={c || 'todo'}
+            onClick={() => set('categoria', c)}
+            aria-pressed={categoria === c}
+            className={`shrink-0 rounded-full border px-4 py-2 text-sm transition-colors ${categoria === c ? 'border-rosa bg-rosa text-white' : 'border-borde bg-white hover:bg-acento'}`}
+          >
+            {c || 'Todo'}
+          </button>
+        ))}
+      </div>
+
+      {cargando ? (
+        <Cargando texto="Cargando productos…" />
+      ) : error ? (
+        <p className="mt-16 text-center text-suave">No pudimos cargar los productos. Revisa tu conexión e intenta de nuevo.</p>
+      ) : lista.length === 0 ? (
+        <p className="mt-16 text-center text-suave">No encontramos productos. Prueba con otra búsqueda.</p>
+      ) : (
+        <>
+          <p className="mt-6 text-sm text-suave">{lista.length} {lista.length === 1 ? 'producto' : 'productos'}</p>
+          <div className="mt-4 grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
+            {lista.map((p) => <TarjetaProducto key={p.id} p={p} />)}
+          </div>
+        </>
+      )}
     </div>
   )
 }
-
-export default Catalogo

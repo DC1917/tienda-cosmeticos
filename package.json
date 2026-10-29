@@ -1,5 +1,5 @@
 {
-  "name": "joyeria_app",
+  "name": "tienda-cosmeticos",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "node tests/tienda.test.js",
+    "deploy": "vite build && firebase deploy --only hosting,firestore"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",

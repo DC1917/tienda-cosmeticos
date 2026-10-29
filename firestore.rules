@@ -1,0 +1,25 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Correos que pueden administrar la tienda (agregar el de la dueña aquí).
+    // Las cuentas se crean a mano en la consola de Firebase; el registro público está desactivado.
+    function esAdmin() {
+      return request.auth != null
+        && request.auth.token.email in ['diegocontreras1917@gmail.com'];
+    }
+    function productoValido(d) {
+      return d.nombre is string && d.nombre.size() > 0 && d.nombre.size() <= 150
+        && d.precio is int && d.precio > 0
+        && d.stock is int && d.stock >= 0
+        && d.fotos is list && d.fotos.size() <= 12;
+    }
+    match /productos/{id} {
+      allow read: if true;
+      allow create, update: if esAdmin() && productoValido(request.resource.data);
+      allow delete: if esAdmin();
+    }
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

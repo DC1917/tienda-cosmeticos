@@ -1,37 +1,50 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { useEffect } from 'react'
+import { BrowserRouter, Link, Outlet, Route, Routes, useLocation } from 'react-router-dom'
+import { CartProvider } from './CartContext'
+import { Footer, Header, WhatsAppFlotante } from './ui'
+import Inicio from './Inicio'
 import Catalogo from './Catalogo'
 import DetalleProducto from './DetalleProducto'
-import AdminProductos from './AdminProductos'
 import Carrito from './Carrito'
-import Header from './Header'
-import { CartProvider } from './CartContext'
+import AdminProductos from './AdminProductos'
 
-function StoreLayout() {
+function Tienda() {
+  const { pathname } = useLocation()
+  useEffect(() => { window.scrollTo(0, 0) }, [pathname])
   return (
     <>
       <Header />
-      <main>
-        <Routes>
-          <Route path="/" element={<Catalogo />} />
-          <Route path="/producto/:id" element={<DetalleProducto />} />
-          <Route path="/carrito" element={<Carrito />} />
-        </Routes>
-      </main>
+      <main><Outlet /></main>
+      <Footer />
+      <WhatsAppFlotante />
     </>
   )
 }
 
-function App() {
+function NoEncontrado() {
   return (
-    <BrowserRouter>
-      <CartProvider>
-        <Routes>
-          <Route path="/*" element={<StoreLayout />} />
-          <Route path="/admin" element={<AdminProductos />} />
-        </Routes>
-      </CartProvider>
-    </BrowserRouter>
+    <div className="py-24 text-center">
+      <h1 className="text-4xl">Página no encontrada</h1>
+      <Link to="/" className="mt-4 inline-block text-rosa underline">Volver al inicio</Link>
+    </div>
   )
 }
 
-export default App
+export default function App() {
+  return (
+    <CartProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<Tienda />}>
+            <Route path="/" element={<Inicio />} />
+            <Route path="/catalogo" element={<Catalogo />} />
+            <Route path="/producto/:id" element={<DetalleProducto />} />
+            <Route path="/carrito" element={<Carrito />} />
+            <Route path="*" element={<NoEncontrado />} />
+          </Route>
+          <Route path="/admin" element={<AdminProductos />} />
+        </Routes>
+      </BrowserRouter>
+    </CartProvider>
+  )
+}
