@@ -1,72 +1,84 @@
-import { useEffect, useState } from 'react'
-import { collection, getDocs } from 'firebase/firestore'
-import { db } from './firebase'
-import { Link } from 'react-router-dom'
-import SakuraIcon from './SakuraIcon'
+import { useMemo } from 'react'
+import { useSearchParams } from 'react-router-dom'
+import { useProductos } from './productos'
+import { CATEGORIAS, precioFinal } from './tienda'
+import { Cargando, Icono, TarjetaProducto } from './ui'
 
-function Catalogo() {
-  const [productos, setProductos] = useState([])
-  const [cargando, setCargando] = useState(true)
+export default function Catalogo() {
+  const [params, setParams] = useSearchParams()
+  const categoria = params.get('categoria') || ''
+  const q = params.get('q') || ''
+  const orden = params.get('orden') || ''
+  const { productos, cargando, error } = useProductos()
 
-  useEffect(() => {
-    async function obtenerProductos() {
-      const snapshot = await getDocs(collection(db, 'cosmeticos'))
-      setProductos(snapshot.docs.map(d => ({ id: d.id, ...d.data() })))
-      setCargando(false)
+  const lista = useMemo(() => {
+    let r = productos
+    if (categoria) r = r.filter((p) => p.categoria === categoria)
+    if (q.trim()) {
+      const t = q.toLowerCase()
+      r = r.filter((p) => `${p.nombre} ${p.marca} ${p.descripcion}`.toLowerCase().includes(t))
     }
-    obtenerProductos()
-  }, [])
+    if (orden) r = [...r].sort((a, b) => (orden === 'asc' ? 1 : -1) * (precioFinal(a) - precioFinal(b)))
+    return r
+  }, [productos, categoria, q, orden])
 
-  if (cargando) return (
-    <div className="min-h-screen flex items-center justify-center bg-rose-50/40">
-      <p className="text-xs uppercase tracking-widest text-rose-400 animate-pulse font-medium">Cargando catálogo con amor...</p>
-    </div>
-  )
+  const set = (k, v) =>
+    setParams((p) => { v ? p.set(k, v) : p.delete(k); return p }, { replace: true })
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-rose-50/50 via-white to-pink-50/30 py-12 px-6">
-      <div className="max-w-6xl mx-auto">
-        <header className="text-center mb-12">
-          <div className="flex justify-center mb-3">
-            <SakuraIcon className="h-10 w-10 text-pink-400" />
-          </div>
-          <span className="text-[11px] uppercase tracking-[0.3em] text-pink-600 font-semibold bg-pink-100/60 px-4 py-1.5 rounded-full inline-block mb-3 shadow-xs">
-            Cosmética & Perfumería Exclusiva
-          </span>
-          <h1 className="text-4xl font-medium font-serif text-slate-800 tracking-tight">Catálogo</h1>
-        </header>
+    <div className="mx-auto max-w-6xl px-4 py-12">
+      <p className="eyebrow">Tienda</p>
+      <h1 className="mt-2 text-5xl">Catálogo</h1>
 
-        {productos.length === 0 ? (
-          <div className="text-center py-16 bg-white/80 rounded-3xl border border-pink-100 shadow-sm max-w-md mx-auto">
-            <p className="text-sm text-slate-500 font-light">Pronto tendremos productos hermosos disponibles para ti 🌸</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-            {productos.map(p => (
-              <Link 
-                to={`/producto/${p.id}`} 
-                key={p.id} 
-                className="bg-white/90 backdrop-blur-xs rounded-3xl p-5 border border-pink-100 shadow-sm hover:shadow-xl hover:border-pink-200 transition-all duration-300 group flex flex-col justify-between"
-              >
-                <div>
-                  <div className="aspect-square rounded-2xl overflow-hidden bg-rose-50/50 mb-4 border border-rose-100/50">
-                    <img src={p.fotoPortada} alt={p.nombre} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  </div>
-                  <h2 className="text-base font-medium text-slate-800 mb-1 line-clamp-1">{p.nombre}</h2>
-                </div>
-                <div className="flex items-center justify-between mt-4 pt-3 border-t border-rose-50">
-                  <span className="text-pink-600 font-bold text-base">${p.precio?.toLocaleString('es-CL')}</span>
-                  <span className="text-xs bg-pink-50 text-pink-600 font-medium px-3 py-1.5 rounded-xl group-hover:bg-pink-600 group-hover:text-white transition-colors">
-                    Ver detalle 💕
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        )}
+      <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+        <label className="relative flex-1">
+          <span className="sr-only">Buscar</span>
+          <Icono n="buscar" className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-suave" />
+          <input
+            type="search"
+            value={q}
+            onChange={(e) => set('q', e.target.value)}
+            placeholder="Buscar productos o marcas…"
+            className="h-12 w-full rounded-full border border-borde bg-white pl-11 pr-4 text-base outline-none focus:ring-2 focus:ring-rosa/30"
+          />
+        </label>
+        <label>
+          <span className="sr-only">Ordenar</span>
+          <select value={orden} onChange={(e) => set('orden', e.target.value)} className="h-12 w-full rounded-full border border-borde bg-white px-5 text-base outline-none">
+            <option value="">Ordenar: novedades</option>
+            <option value="asc">Precio: menor a mayor</option>
+            <option value="desc">Precio: mayor a menor</option>
+          </select>
+        </label>
       </div>
+
+      <div className="-mx-4 mt-5 flex gap-2 overflow-x-auto px-4 pb-2">
+        {['', ...CATEGORIAS].map((c) => (
+          <button
+            key={c || 'todo'}
+            onClick={() => set('categoria', c)}
+            aria-pressed={categoria === c}
+            className={`shrink-0 rounded-full border px-4 py-2 text-sm transition-colors ${categoria === c ? 'border-rosa bg-rosa text-white' : 'border-borde bg-white hover:bg-acento'}`}
+          >
+            {c || 'Todo'}
+          </button>
+        ))}
+      </div>
+
+      {cargando ? (
+        <Cargando texto="Cargando productos…" />
+      ) : error ? (
+        <p className="mt-16 text-center text-suave">No pudimos cargar los productos. Revisa tu conexión e intenta de nuevo.</p>
+      ) : lista.length === 0 ? (
+        <p className="mt-16 text-center text-suave">No encontramos productos. Prueba con otra búsqueda.</p>
+      ) : (
+        <>
+          <p className="mt-6 text-sm text-suave">{lista.length} {lista.length === 1 ? 'producto' : 'productos'}</p>
+          <div className="mt-4 grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
+            {lista.map((p) => <TarjetaProducto key={p.id} p={p} />)}
+          </div>
+        </>
+      )}
     </div>
   )
 }
-
-export default Catalogo
