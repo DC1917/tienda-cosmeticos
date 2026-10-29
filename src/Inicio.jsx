@@ -3,7 +3,7 @@ import { useProductos } from './productos'
 import { CATEGORIAS, STORE } from './tienda'
 import { Icono, TarjetaProducto } from './ui'
 
-const HERO = 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=1800&q=80'
+import HERO from './assets/hero.jpg'
 const FOTO_CATEGORIA = {
   Perfumes: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=600',
   Maquillaje: 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=600',
@@ -19,7 +19,7 @@ export default function Inicio() {
   return (
     <>
       <section className="relative overflow-hidden">
-        <img src={HERO} alt="" className="absolute inset-0 h-full w-full object-cover object-[70%_center]" />
+        <img src={HERO} alt="" className="absolute inset-0 h-full w-full object-cover object-[78%_center]" />
         <div className="absolute inset-0 bg-gradient-to-r from-fondo via-fondo/80 to-fondo/10 sm:via-fondo/60 sm:to-transparent" />
         <div className="relative mx-auto flex min-h-[22rem] max-w-6xl flex-col justify-center px-4 py-12 sm:min-h-[26rem]">
           <p className="eyebrow aparecer">Perfumería boutique</p>
