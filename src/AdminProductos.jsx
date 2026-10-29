@@ -152,11 +152,11 @@ function AdminProductos() {
 
   if (!autenticado) {
     return (
-      <div className="min-h-screen bg-rose-50/50 flex items-center justify-center p-6">
-        <div className="bg-white p-8 rounded-3xl border border-pink-100 shadow-lg max-w-md w-full text-center">
-          <span className="text-[11px] uppercase tracking-[0.3em] text-pink-600 font-semibold block mb-2">🌸 Panel de Mamá 🌸</span>
-          <h1 className="text-2xl font-light font-serif text-slate-800 mb-2">Acceso Admin</h1>
-          <p className="text-xs text-slate-500 font-light mb-6">Ingresa tu clave secreta para administrar la tiendita.</p>
+      <div className="min-h-screen bg-gradient-to-br from-[var(--bg-subtle)] to-[var(--bg)] flex items-center justify-center p-6">
+        <div className="bg-white p-8 rounded-2xl border border-[var(--border)] shadow-elegant max-w-md w-full text-center">
+          <span className="text-[10px] uppercase tracking-[0.3em] text-[var(--accent)] font-semibold block mb-2">���� Panel de Mamá 🌸</span>
+          <h1 className="text-2xl font-light font-serif text-[var(--fg)] mb-2">Acceso Admin</h1>
+          <p className="text-xs text-[var(--muted)] font-light mb-6">Ingresa tu clave secreta para administrar la tiendita.</p>
           
           <form onSubmit={handleLogin} className="space-y-4">
             <input
@@ -164,13 +164,13 @@ function AdminProductos() {
               placeholder="Contraseña secreta"
               value={passwordInput}
               onChange={(e) => setPasswordInput(e.target.value)}
-              className="w-full border border-pink-200 rounded-2xl p-3.5 text-sm bg-rose-50/30 text-center focus:outline-none focus:border-pink-400"
+              className="w-full border border-[var(--accent-soft)] rounded-2xl p-3.5 text-sm bg-[var(--bg-subtle)] text-center focus:outline-none focus:border-[var(--accent)] transition-all text-slate-800"
               autoFocus
               required
             />
             <button
               type="submit"
-              className="w-full bg-pink-500 hover:bg-pink-600 text-white py-3.5 rounded-2xl text-xs uppercase tracking-widest font-bold transition-all shadow-md cursor-pointer"
+              className="w-full bg-gradient-to-r from-[var(--accent)] to-[var(--accent-soft)] hover:from-[var(--accent-600)] hover:to-[var(--accent-500)] text-white py-3.5 rounded-2xl text-xs uppercase tracking-widest font-bold transition-all shadow-lg cursor-pointer"
             >
               Ingresar al Panel 💕
             </button>
@@ -181,30 +181,30 @@ function AdminProductos() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-10 bg-rose-50/30 min-h-screen">
-      <div className="flex justify-between items-center bg-white p-6 rounded-3xl border border-pink-100 shadow-sm">
+    <div className="max-w-4xl mx-auto p-6 space-y-10 bg-gradient-to-b from-[var(--bg-subtle)] to-[var(--bg)] min-h-screen">
+      <div className="flex justify-between items-center bg-white p-6 rounded-2xl border border-[var(--border)] shadow-elegant">
         <div>
-          <span className="text-[10px] uppercase tracking-widest text-pink-600 font-semibold">Modo Administrador</span>
-          <h2 className="text-lg font-light font-serif text-slate-800">Tienda de Mamá 💖</h2>
+          <span className="text-[10px] uppercase tracking-[0.3em] text-[var(--accent)] font-semibold">Modo Administrador</span>
+          <h2 className="text-lg font-light font-serif text-[var(--fg)]">Tienda de Mamá 💖</h2>
         </div>
         <button 
           onClick={cerrarSesion} 
-          className="text-xs text-rose-600 uppercase tracking-widest border border-rose-200 px-4 py-2 rounded-2xl hover:bg-rose-50 transition-colors cursor-pointer font-medium"
+          className="text-xs text-[var(--accent-600)] uppercase tracking-widest border border-[var(--accent-soft)] px-4 py-2 rounded-2xl hover:bg-[var(--accent-soft)] transition-colors cursor-pointer font-medium"
         >
           Cerrar sesión
         </button>
       </div>
 
-      <div className="bg-white p-8 md:p-10 rounded-3xl border border-pink-100 shadow-sm">
+      <div className="bg-white p-8 md:p-10 rounded-2xl border border-[var(--border)] shadow-elegant">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-light font-serif tracking-tight text-slate-800">
-            {editandoId ? '✨ Editar producto' : '🌸 Agregar nuevo producto'}
+          <h2 className="text-xl font-light font-serif tracking-tight text-[var(--fg)]">
+            {editandoId ? '✨ Editar producto' : '���� Agregar nuevo producto'}
           </h2>
           {editandoId && (
             <button 
               type="button" 
               onClick={cancelarEdicion}
-              className="text-xs uppercase tracking-widest text-pink-600 hover:text-pink-700 underline cursor-pointer"
+              className="text-xs uppercase tracking-widest text-[var(--accent-600)] hover:text-[var(--accent-500)] underline cursor-pointer"
             >
               Cancelar edición
             </button>
@@ -213,30 +213,30 @@ function AdminProductos() {
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-xs uppercase tracking-widest text-slate-500 font-semibold mb-2">Título del producto</label>
+            <label className="block text-xs uppercase tracking-[0.3em] text-[var(--muted)] font-semibold mb-2">Título del producto</label>
             <input
               type="text"
               placeholder="Ej: Perfume Dolce&Gabbana hombre 100ml"
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
-              className="w-full border border-pink-200 rounded-2xl p-3.5 text-sm bg-rose-50/20 focus:bg-white focus:outline-none focus:border-pink-400 transition-all text-slate-800"
+              className="w-full border border-[var(--accent-soft)] rounded-2xl p-3.5 text-sm bg-[var(--bg-subtle)] focus:bg-white focus:outline-none focus:border-[var(--accent)] transition-all text-slate-800"
               required
             />
           </div>
 
           <div>
-            <label className="block text-xs uppercase tracking-widest text-slate-500 font-semibold mb-2">Descripción / Detalle del producto</label>
+            <label className="block text-xs uppercase tracking-[0.3em] text-[var(--muted)] font-semibold mb-2">Descripción / Detalle del producto</label>
             <textarea
               placeholder="Ej: Notas amaderadas, larga duración, ideal para regalo..."
               value={descripcion}
               onChange={(e) => setDescripcion(e.target.value)}
-              className="w-full border border-pink-200 rounded-2xl p-3.5 text-sm bg-rose-50/20 focus:bg-white focus:outline-none focus:border-pink-400 transition-all text-slate-800 h-28"
+              className="w-full border border-[var(--accent-soft)] rounded-2xl p-3.5 text-sm bg-[var(--bg-subtle)] focus:bg-white focus:outline-none focus:border-[var(--accent)] transition-all text-slate-800 h-28"
               required
             />
           </div>
 
           <div>
-            <label className="block text-xs uppercase tracking-widest text-slate-500 font-semibold mb-2">Precio ($ CLP)</label>
+            <label className="block text-xs uppercase tracking-[0.3em] text-[var(--muted)] font-semibold mb-2">Precio ($ CLP)</label>
             <input
               type="number"
               step="1"
@@ -244,45 +244,45 @@ function AdminProductos() {
               placeholder="Ej: 15990"
               value={precio}
               onChange={(e) => setPrecio(e.target.value)}
-              className="w-full border border-pink-200 rounded-2xl p-3.5 text-sm bg-rose-50/20 focus:bg-white focus:outline-none focus:border-pink-400 transition-all text-slate-800"
+              className="w-full border border-[var(--accent-soft)] rounded-2xl p-3.5 text-sm bg-[var(--bg-subtle)] focus:bg-white focus:outline-none focus:border-[var(--accent)] transition-all text-slate-800"
               required
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-            <div className="p-4 border border-pink-100 rounded-2xl bg-rose-50/30">
-              <label className="block text-xs uppercase tracking-widest text-slate-700 font-semibold mb-2">
+            <div className="p-4 border border-[var(--accent-soft)] rounded-2xl bg-[var(--bg-subtle)]">
+              <label className="block text-xs uppercase tracking-[0.3em] text-[var(--muted)] font-semibold mb-2">
                 {editandoId ? 'Cambiar foto portada (opcional)' : 'Foto de portada *'}
               </label>
               <input
                 type="file"
                 accept="image/*"
                 onChange={(e) => setArchivoPortada(e.target.files[0])}
-                className="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-pink-500 file:text-white hover:file:bg-pink-600 cursor-pointer"
+                className="w-full text-xs text-[var(--muted)] file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[var(--accent-50)] file:text-[var(--accent)] hover:file:bg-[var(--accent-600)] cursor-pointer"
                 required={!editandoId}
               />
               {editandoId && fotoPortadaActual && (
-                <p className="text-[10px] text-pink-600 mt-2">Ya tiene una portada asignada.</p>
+                <p className="text-[10px] text-[var(--accent)] mt-2">Ya tiene una portada asignada.</p>
               )}
             </div>
 
-            <div className="p-4 border border-pink-100 rounded-2xl bg-rose-50/30">
-              <label className="block text-xs uppercase tracking-widest text-slate-700 font-semibold mb-2">Fotos de galería (Opcional)</label>
+            <div className="p-4 border border-[var(--accent-soft)] rounded-2xl bg-[var(--bg-subtle)]">
+              <label className="block text-xs uppercase tracking-[0.3em] text-[var(--muted)] font-semibold mb-2">Fotos de galería (Opcional)</label>
               <input
                 type="file"
                 accept="image/*"
                 multiple
                 onChange={(e) => setArchivosGaleria(Array.from(e.target.files))}
-                className="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-rose-200 file:text-slate-700 hover:file:bg-rose-300 cursor-pointer"
+                className="w-full text-xs text-[var(--muted)] file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[var(--rose-200)] file:text-[var(--stone-700)] hover:file:bg-[var(--rose-300)] cursor-pointer"
               />
               {editandoId && fotosGaleriaActual.length > 0 && (
-                <p className="text-[10px] text-pink-600 mt-2">Tiene {fotosGaleriaActual.length} foto(s) en galería.</p>
+                <p className="text-[10px] text-[var(--accent)] mt-2">Tiene {fotosGaleriaActual.length} foto(s) en galería.</p>
               )}
             </div>
           </div>
 
           {mensaje && (
-            <div className="p-3 rounded-2xl bg-pink-50 text-pink-700 text-xs text-center font-medium border border-pink-100">
+            <div className="p-3 rounded-2xl bg-[var(--accent-soft)] text-[var(--accent)] text-xs text-center font-medium border border-[var(--accent-soft)]">
               {mensaje}
             </div>
           )}
@@ -290,41 +290,41 @@ function AdminProductos() {
           <button
             type="submit"
             disabled={subiendo}
-            className="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white py-4 rounded-2xl font-bold text-xs uppercase tracking-widest transition-all shadow-md active:scale-[0.99] disabled:opacity-50 cursor-pointer"
+            className="w-full bg-gradient-to-r from-[var(--accent)] to-[var(--accent-soft)] hover:from-[var(--accent-600)] hover:to-[var(--accent-500)] text-white py-4 rounded-2xl font-bold text-xs uppercase tracking-widest transition-all shadow-lg active:scale-[0.99] disabled:opacity-50 cursor-pointer"
           >
             {subiendo ? 'Guardando en la nube...' : (editandoId ? 'Actualizar producto ✨' : 'Guardar producto 🌸')}
           </button>
         </form>
       </div>
 
-      <div className="bg-white p-8 md:p-10 rounded-3xl border border-pink-100 shadow-sm">
-        <h2 className="text-xl font-light font-serif tracking-tight text-slate-800 mb-6">
+      <div className="bg-white p-8 md:p-10 rounded-2xl border border-[var(--border)] shadow-elegant">
+        <h2 className="text-xl font-light font-serif tracking-tight text-[var(--fg)] mb-6">
           Catálogo actual ({productos.length})
         </h2>
 
         {productos.length === 0 ? (
-          <p className="text-xs text-slate-400 font-light text-center py-6">No hay productos registrados todavía.</p>
+          <p className="text-xs text-[var(--muted)] font-light text-center py-6">No hay productos registrados todavía.</p>
         ) : (
-          <div className="divide-y divide-rose-50">
+          <div className="divide-y divide-[var(--border)]">
             {productos.map(p => (
               <div key={p.id} className="py-4 flex items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
-                  <img src={p.fotoPortada} alt={p.nombre} className="w-14 h-14 object-cover rounded-2xl border border-pink-100 shadow-xs" />
+                  <img src={p.fotoPortada} alt={p.nombre} className="w-14 h-14 object-cover rounded-2xl border border-[var(--border)] shadow-xs" />
                   <div>
-                    <p className="font-medium text-slate-800 text-sm">{p.nombre}</p>
-                    <p className="text-pink-600 text-xs font-bold mt-0.5">${p.precio?.toLocaleString('es-CL')}</p>
+                    <p className="font-medium text-[var(--fg)] text-sm">{p.nombre}</p>
+                    <p className="text-[var(--accent)] text-xs font-bold mt-0.5">$${p.precio?.toLocaleString('es-CL')}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
                   <button 
                     onClick={() => iniciarEdicion(p)} 
-                    className="text-xs text-slate-600 hover:text-pink-600 font-medium tracking-wide uppercase transition-colors cursor-pointer px-3 py-2 border border-pink-100 rounded-xl bg-pink-50/50"
+                    className="text-xs text-[var(--stone-600)] hover:text-[var(--accent)] font-medium tracking-wide uppercase transition-colors cursor-pointer px-3 py-2 border border-[var(--accent-soft)] rounded-xl bg-[var(--accent-soft)]/50"
                   >
                     Editar
                   </button>
                   <button 
                     onClick={() => handleEliminar(p.id)} 
-                    className="text-xs text-slate-400 hover:text-red-600 font-medium tracking-wide uppercase transition-colors cursor-pointer px-3 py-2"
+                    className="text-xs text-[var(--stone-400)] hover.text-red-600 font-medium tracking-wide uppercase transition-colors cursor-pointer px-3 py-2"
                   >
                     Eliminar
                   </button>

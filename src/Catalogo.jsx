@@ -3,6 +3,30 @@ import { collection, getDocs } from 'firebase/firestore'
 import { db } from './firebase'
 import { Link } from 'react-router-dom'
 
+function SakuraFlower({ className = '' }) {
+  return (
+    <svg
+      className={`sakura-mark ${className}`}
+      viewBox="0 0 100 100"
+      aria-hidden="true"
+      focusable="false"
+    >
+      {[0, 72, 144, 216, 288].map(angle => (
+        <ellipse
+          key={angle}
+          cx="50"
+          cy="24"
+          rx="16"
+          ry="24"
+          fill="#d88e9a"
+          transform={`rotate(${angle} 50 50)`}
+        />
+      ))}
+      <circle cx="50" cy="50" r="6" fill="#f6d99e" />
+    </svg>
+  )
+}
+
 function Catalogo() {
   const [productos, setProductos] = useState([])
   const [cargando, setCargando] = useState(true)
@@ -16,50 +40,97 @@ function Catalogo() {
     obtenerProductos()
   }, [])
 
-  if (cargando) return (
-    <div className="min-h-screen flex items-center justify-center bg-rose-50/40">
-      <p className="text-xs uppercase tracking-widest text-rose-400 animate-pulse font-medium">Cargando catálogo con amor...</p>
-    </div>
-  )
+  if (cargando) {
+    return (
+      <div className="catalog-loading" role="status">
+        <SakuraFlower />
+        <p>Cargando catálogo...</p>
+      </div>
+    )
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-rose-50/50 via-white to-pink-50/30 py-12 px-6">
-      <div className="max-w-6xl mx-auto">
-        <header className="text-center mb-12">
-          <span className="text-[11px] uppercase tracking-[0.3em] text-pink-600 font-semibold bg-pink-100/60 px-4 py-1.5 rounded-full inline-block mb-3 shadow-xs">
-            ✨ Cosmética & Perfumería Exclusiva ✨
-          </span>
-          <h1 className="text-4xl font-light font-serif text-slate-800 tracking-tight">Catálogo de Mamá</h1>
-        </header>
+    <div className="catalog-page">
+      <div className="catalog-container">
+        <section className="catalog-hero" aria-labelledby="catalog-title">
+          <div className="catalog-hero__copy">
+            <p className="catalog-eyebrow"><span /> Belleza en cada ritual</p>
+            <h1 id="catalog-title">Un momento<br /><em>para ti.</em></h1>
+            <p className="catalog-hero__description">
+              Encuentra tus favoritos de cosmética y perfumería para sentirte bien todos los días.
+            </p>
+            <a className="catalog-hero__link" href="#coleccion">
+              Descubrir la colección <span aria-hidden="true">↓</span>
+            </a>
+            <p className="catalog-hero__note">DETALLES QUE TE HACEN SENTIR BIEN</p>
+          </div>
 
-        {productos.length === 0 ? (
-          <div className="text-center py-16 bg-white/80 rounded-3xl border border-pink-100 shadow-sm max-w-md mx-auto">
-            <p className="text-sm text-slate-500 font-light">Pronto tendremos productos hermosos disponibles para ti 🌸</p>
+          <div className="catalog-hero__art" aria-hidden="true">
+            <svg className="catalog-hero__branch" viewBox="0 0 360 300" focusable="false">
+              <path d="M20 280C78 234 112 190 157 151S232 102 319 26M91 218C71 191 57 157 55 126M157 151C192 151 221 158 250 179M231 104C230 75 244 51 269 35" />
+            </svg>
+            <SakuraFlower className="catalog-hero__blossom--one" />
+            <SakuraFlower className="catalog-hero__blossom--two" />
+            <SakuraFlower className="catalog-hero__blossom--three" />
+            <SakuraFlower className="catalog-hero__blossom--four" />
+            <span className="catalog-hero__art-label">Un detalle de color para tu día</span>
           </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-            {productos.map(p => (
-              <Link 
-                to={`/producto/${p.id}`} 
-                key={p.id} 
-                className="bg-white/90 backdrop-blur-xs rounded-3xl p-5 border border-pink-100 shadow-sm hover:shadow-xl hover:border-pink-200 transition-all duration-300 group flex flex-col justify-between"
-              >
-                <div>
-                  <div className="aspect-square rounded-2xl overflow-hidden bg-rose-50/50 mb-4 border border-rose-100/50">
-                    <img src={p.fotoPortada} alt={p.nombre} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+        </section>
+
+        <section id="coleccion" className="catalog-collection" aria-labelledby="collection-title">
+          <div className="catalog-section-heading">
+            <div>
+              <p className="catalog-eyebrow"><span /> Productos para ti</p>
+              <h2 id="collection-title">La colección</h2>
+            </div>
+            <span className="catalog-section-heading__count">
+              {productos.length.toString().padStart(2, '0')} ARTÍCULOS
+            </span>
+          </div>
+
+          {productos.length === 0 ? (
+            <div className="catalog-empty">
+              <SakuraFlower className="catalog-empty__mark" />
+              <h3>Un espacio para lo que viene</h3>
+              <p>Pronto encontrarás nuevos productos en nuestra colección.</p>
+            </div>
+          ) : (
+            <div className="catalog-grid">
+              {productos.map((producto, index) => (
+                <Link
+                  to={`/producto/${producto.id}`}
+                  key={producto.id}
+                  className="product-card"
+                  aria-label={`Ver ${producto.nombre}`}
+                >
+                  <div className="product-card__image-wrap">
+                    <img
+                      src={producto.fotoPortada}
+                      alt={producto.nombre}
+                      className="product-card__image"
+                      loading="lazy"
+                    />
+                    <span className="product-card__index">
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                    <span className="product-card__arrow" aria-hidden="true">↗</span>
                   </div>
-                  <h2 className="text-base font-medium text-slate-800 mb-1 line-clamp-1">{p.nombre}</h2>
-                </div>
-                <div className="flex items-center justify-between mt-4 pt-3 border-t border-rose-50">
-                  <span className="text-pink-600 font-bold text-base">${p.precio?.toLocaleString('es-CL')}</span>
-                  <span className="text-xs bg-pink-50 text-pink-600 font-medium px-3 py-1.5 rounded-xl group-hover:bg-pink-600 group-hover:text-white transition-colors">
-                    Ver detalle 💕
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        )}
+                  <div className="product-card__details">
+                    <div>
+                      <h3>{producto.nombre}</h3>
+                      <p>{producto.descripcion || 'Un detalle para tu ritual de cuidado.'}</p>
+                    </div>
+                    <span className="product-card__price">
+                      {producto.precio != null
+                        ? `$${producto.precio.toLocaleString('es-CL')}`
+                        : 'Consultar'}
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+        </section>
       </div>
     </div>
   )
