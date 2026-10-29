@@ -21,9 +21,9 @@ export default function Inicio() {
       <section className="relative overflow-hidden">
         <img src={HERO} alt="" className="absolute inset-0 h-full w-full object-cover object-[70%_center]" />
         <div className="absolute inset-0 bg-gradient-to-r from-fondo via-fondo/80 to-fondo/10 sm:via-fondo/60 sm:to-transparent" />
-        <div className="relative mx-auto flex min-h-[72vh] max-w-6xl flex-col justify-center px-4 py-20">
+        <div className="relative mx-auto flex min-h-[22rem] max-w-6xl flex-col justify-center px-4 py-12 sm:min-h-[26rem]">
           <p className="eyebrow aparecer">Perfumería boutique</p>
-          <h1 className="aparecer mt-4 max-w-xl text-6xl leading-[1.05] sm:text-7xl">
+          <h1 className="aparecer mt-3 max-w-xl text-5xl leading-[1.05] sm:text-6xl">
             {STORE.nombre} <span className="italic text-rosa">{STORE.apellido}</span>
           </h1>
           <p className="aparecer mt-5 max-w-md text-lg text-suave">{STORE.slogan}</p>
