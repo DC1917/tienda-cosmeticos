@@ -4,7 +4,6 @@ export const STORE = {
   apellido: 'Cosmética',
   slogan: 'Belleza que te hace brillar',
   whatsapp: '56912345678',
-  instagram: 'valecosmetica',
 }
 export const NOMBRE = `${STORE.nombre} ${STORE.apellido}`
 

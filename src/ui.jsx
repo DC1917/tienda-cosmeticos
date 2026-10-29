@@ -14,7 +14,6 @@ const PATHS = {
   cerrar: 'M18 6 6 18M6 6l12 12',
   foto: 'M21 15V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10M3 16l5-5 5 5M14 14l1-1 2 2M19 16v6M16 19h6',
   salir: 'M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9',
-  instagram: 'M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zM16 11.4A4 4 0 1 1 12.6 8 4 4 0 0 1 16 11.4zM17.5 6.5h0',
   chat: 'M21 11.5a8.4 8.4 0 0 1-12.3 7.4L3 21l2.1-5.7A8.5 8.5 0 1 1 21 11.5z',
 }
 export function Icono({ n, className = 'h-5 w-5' }) {
@@ -81,7 +80,6 @@ export function Footer() {
           <p className="eyebrow mb-3">Contacto</p>
           <ul className="space-y-2 text-suave">
             <li><a href={whatsappUrl()} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 hover:text-tinta"><Icono n="chat" className="h-4 w-4" /> WhatsApp</a></li>
-            <li><a href={`https://instagram.com/${STORE.instagram}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 hover:text-tinta"><Icono n="instagram" className="h-4 w-4" /> @{STORE.instagram}</a></li>
           </ul>
         </div>
       </div>
